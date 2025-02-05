@@ -1,7 +1,18 @@
+using Newsletter.Services;
+using Newsletter.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add support for basic authentication
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie(options => options.LoginPath = "/Account/Login");
+
+// Register the subscriber repository in the DI container
+builder.Services.AddSingleton<ISubscriberRepository, InMemorySubscriberRepository>();
+
+builder.Services.AddScoped<INewsletterService, NewsletterService>();
 
 var app = builder.Build();
 
@@ -16,6 +27,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

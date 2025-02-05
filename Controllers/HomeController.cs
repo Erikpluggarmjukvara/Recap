@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using HelloWorld.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HelloWorld.Controllers;
 
@@ -27,5 +28,10 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+    [Authorize]
+    public IActionResult WhoAmI()
+    {
+        return View();
     }
 }
